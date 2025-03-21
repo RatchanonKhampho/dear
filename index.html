@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ส่งความรู้สึกจากใจ</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap');
+        
+        :root {
+            --primary-color: #ff3678;
+            --secondary-color: #8a2be2;
+            --text-color: #ffffff;
+            --gradient-bg: linear-gradient(135deg, #5b247a, #1b1464, #0f0c29);
+            --card-bg: rgba(15, 15, 40, 0.8);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: var(--gradient-bg);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            color: var(--text-color);
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .bg-wrapper {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bg-stars {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+        }
+        
+        .galaxy {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
+            opacity: 0.3;
+            animation: galaxyPulse 8s infinite ease-in-out;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 100%;
+            width: 100%;
+            margin: 1rem 0;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: fadeUp 1s forwards;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+        
+        .heart-container {
+            position: relative;
+            height: 120px;
+            width: 120px;
+            margin: 1rem auto;
+        }
+        
+        .heart {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--primary-color);
+            height: 80px;
+            width: 80px;
+            margin: auto;
+            transform: rotate(-45deg);
+            animation: heartbeat 1.5s infinite;
+            box-shadow: 0 0 30px var(--primary-color);
+        }
+        
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            height: 80px;
+            width: 80px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 0 30px var(--primary-color);
+        }
+        
+        .heart::before {
+            top: -40px;
+            left: 0;
+        }
+        
+        .heart::after {
+            top: 0;
+            right: -40px;
+        }
+        
+        .heart-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            font-size: 24px;
+            z-index: 10;
+            color: white;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px var(--primary-color);
+            position: relative;
+            animation: textGlow 3s infinite alternate;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 5px rgba(0,0,0,0.7);
+        }
+        
+        .highlight {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-shadow: 0 0 5px var(--primary-color);
+        }
+        
+        .message {
+            margin-top: 1rem;
+            animation-delay: 0.3s;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 1rem;
+            width: 100%;
+        }
+        
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            color: white;
+            z-index: 1;
+            font-family: 'Prompt', sans-serif;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+            z-index: -1;
+        }
+        
+        .btn:hover::before,
+        .btn:active::before {
+            height: 100%;
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        .falling-items {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .falling-item {
+            position: absolute;
+            top: -10%;
+            z-index: 0;
+            opacity: 0.7;
+            pointer-events: none;
+            animation: falling linear infinite;
+        }
+        
+        .special-message {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 1s ease, opacity 1s ease;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            padding: 0 1rem;
+            opacity: 0;
+        }
+        
+        .show-message {
+            max-height: 500px;
+            opacity: 1;
+            padding: 1rem;
+            margin-top: 1rem;
+            animation: fadeIn 1s forwards;
+        }
+        
+        .music-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 100;
+        }
+        
+        .music-controls:hover,
+        .music-controls:active {
+            transform: scale(1.1);
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: rotate(-45deg) scale(1); }
+            14% { transform: rotate(-45deg) scale(1.1); }
+            28% { transform: rotate(-45deg) scale(1); }
+            42% { transform: rotate(-45deg) scale(1.1); }
+            70% { transform: rotate(-45deg) scale(1); }
+            100% { transform: rotate(-45deg) scale(1); }
+        }
+        
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+        
+        @keyframes falling {
+            to {
+                top: 110%;
+                transform: translateX(100px) rotate(360deg);
+            }
+        }
+        
+        @keyframes galaxyPulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.4; }
+            100% { transform: scale(1); opacity: 0.3; }
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-150%) rotate(45deg); }
+            100% { transform: translateX(150%) rotate(45deg); }
+        }
+        
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 15px var(--primary-color); }
+            100% { text-shadow: 0 0 25px var(--primary-color), 0 0 40px var(--secondary-color); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            p {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .card {
+                padding: 1.2rem;
+            }
+            
+            .heart-container {
+                height: 100px;
+                width: 100px;
+            }
+            
+            .heart, .heart::before, .heart::after {
+                height: 60px;
+                width: 60px;
+            }
+            
+            .heart::before {
+                top: -30px;
+            }
+            
+            .heart::after {
+                right: -30px;
+            }
+            
+            .heart-center {
+                font-size: 18px;
+            }
+            
+            .music-controls {
+                bottom: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .special-message p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-wrapper">
+        <div class="bg-stars" id="stars"></div>
+        <div class="galaxy"></div>
+    </div>
+    
+    <div class="falling-items" id="fallingItems"></div>
+    
+    <div class="container">
+        <div class="card" style="animation-delay: 0.2s;">
+            <div class="heart-container floating">
+                <div class="heart"></div>
+                <div class="heart-center"><i class="fas fa-infinity"></i></div>
+            </div>
+            
+            <h1>ส่งความรู้สึกดีๆ <span class="highlight">ถึงคุณ</span></h1>
+            
+            <p>คุณรู้ไหม ว่าทุกครั้งที่ได้เจอคุณ โลกของผมเหมือนหยุดหมุน<br>
+            รอยยิ้มของคุณทำให้วันที่แย่ๆ กลายเป็นวันที่สดใส</p>
+        </div>
+        
+        <div class="card message" style="animation-delay: 0.6s;">
+            <p>คุณเป็นคนพิเศษที่ผมอยากให้รู้ว่า...</p>
+            
+            <div class="special-message" id="specialMessage">
+                <p>ผมชอบในตัวคุณ ในความเป็นคุณ ในทุกๆ อย่างที่คุณเป็น</p>
+                <p>ผมอยากชวนคุณออกไปใช้เวลาด้วยกัน เพื่อทำความรู้จักกันให้มากขึ้น</p>
+                <p>ถ้าคุณรู้สึกเหมือนกัน อยากให้เราเริ่มต้นอะไรดีๆ ด้วยกัน</p>
+                <p class="highlight">คุณจะให้โอกาสผมไหม?</p>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-primary" id="showMessage">เปิดอ่านข้อความพิเศษ</button>
+                <button class="btn btn-secondary" id="yesBtn" style="display: none;">ตกลง ♥</button>
+                <button class="btn btn-secondary" id="noBtn" style="display: none; position: relative;">ยังไม่พร้อม</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="music-controls" id="musicControl">
+        <i class="fas fa-music"></i>
+    </div>
+    
+    <script>
+        // จำกัดจำนวนดาวและเอฟเฟกต์บนมือถือ
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+        
+        // สร้างดาวบนท้องฟ้า
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            // ลดจำนวนดาวบนมือถือ
+            const starCount = isMobile() ? 50 : 150;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // สุ่มขนาดและตำแหน่ง
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // สุ่มการกระพริบ
+                const duration = Math.random() * 3 + 2;
+                star.style.animation = `twinkle ${duration}s infinite ease-in-out ${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+            
+            // เพิ่ม keyframe สำหรับการกระพริบ
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @keyframes twinkle {
+                    0%, 100% { opacity: 0.2; }
+                    50% { opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // สร้างกลีบดอกไม้หรือรูปหัวใจที่ร่วงหล่น แบบเบาลงบนมือถือ
+        function createFallingItems() {
+            const itemsContainer = document.getElementById('fallingItems');
+            const types = ['❤️', '🌸', '✨', '💖', '💕'];
+            
+            // ลดความถี่บนมือถือ
+            const interval = isMobile() ? 1000 : 300;
+            
+            setInterval(() => {
+                const item = document.createElement('div');
+                item.className = 'falling-item';
+                
+                // สุ่มชนิดของสิ่งที่จะร่วงหล่น
+                const typeIndex = Math.floor(Math.random() * types.length);
+                item.textContent = types[typeIndex];
+                
+                // ปรับขนาดให้เล็กลงบนมือถือ
+                item.style.fontSize = isMobile() ? 
+                    `${Math.random() * 15 + 10}px` : 
+                    `${Math.random() * 20 + 10}px`;
+                
+                // สุ่มตำแหน่งและความเร็ว
+                item.style.left = `${Math.random() * 100}%`;
+                const duration = Math.random() * 8 + 5;
+                item.style.animationDuration = `${duration}s`;
+                
+                itemsContainer.appendChild(item);
+                
+                // ลบหลังจากจบแอนิเมชัน
+                setTimeout(() => {
+                    item.remove();
+                }, duration * 1000);
+            }, interval);
+        }
+        
+        // แสดงข้อความพิเศษเมื่อกดปุ่ม
+        document.getElementById('showMessage').addEventListener('click', function() {
+            const specialMessage = document.getElementById('specialMessage');
+            specialMessage.classList.add('show-message');
+            this.style.display = 'none';
+            
+            // แสดงปุ่มตกลงและปฏิเสธ
+            document.getElementById('yesBtn').style.display = 'block';
+            document.getElementById('noBtn').style.display = 'block';
+        });
+        
+        // ปรับการทำงานบนอุปกรณ์สัมผัส
+        const noBtn = document.getElementById('noBtn');
+        if (isMobile()) {
+            // สำหรับมือถือใช้ touchstart แทน mouseover
+            noBtn.addEventListener('touchstart', moveNoButton);
+        } else {
+            noBtn.addEventListener('mouseover', moveNoButton);
+        }
+        
+        // ฟังก์ชันย้ายปุ่ม "ยังไม่พร้อม"
+        function moveNoButton() {
+            const btnWidth = this.offsetWidth;
+            const btnHeight = this.offsetHeight;
+            const maxX = window.innerWidth - btnWidth - 50;
+            const maxY = window.innerHeight - btnHeight - 50;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            this.style.position = 'fixed';
+            this.style.left = `${randomX}px`;
+            this.style.top = `${randomY}px`;
+        }
+        
+        // เมื่อกดปุ่มตกลง
+        document.getElementById('yesBtn').addEventListener('click', function() {
+            const messages = document.querySelectorAll('.card');
+            messages.forEach(msg => msg.style.display = 'none');
+            
+            const container = document.querySelector('.container');
+            const newCard = document.createElement('div');
+            newCard.className = 'card';
+            newCard.style.animation = 'fadeUp 1s forwards';
+            
+            newCard.innerHTML = `
+                <div class="heart-container floating">
+                    <div class="heart"></div>
+                </div>
+                <h1>ขอบคุณที่ให้โอกาส ❤️</h1>
+                <p>คุณทำให้วันนี้เป็นวันที่พิเศษมากๆ</p>
+                <p>ผมสัญญาว่าจะทำให้คุณมีความสุขในทุกๆ วันที่เราได้อยู่ด้วยกัน</p>
+                <p class="highlight">เราจะสร้างความทรงจำดีๆ ร่วมกัน</p>
+            `;
+            
+            container.appendChild(newCard);
+            
+            // เพิ่มเอฟเฟคหัวใจเต้นแรงขึ้น
+            const hearts = document.querySelectorAll('.heart');
+            hearts.forEach(heart => {
+                heart.style.animation = 'heartbeat 1s infinite';
+            });
+            
+            // เพิ่มเอฟเฟคดอกไม้ร่วงเยอะขึ้น
+            createMoreFallingItems();
+        });
+        
+        // เพิ่มเอฟเฟคดอกไม้ร่วงเยอะขึ้นเมื่อกดตกลง
+        function createMoreFallingItems() {
+            const itemsContainer = document.getElementById('fallingItems');
+            const types = ['❤️', '💖', '💕', '💓', '💗', '💞', '💘', '💝'];
+            
+            // ลดจำนวนบนมือถือ
+            const count = isMobile() ? 20 : 50;
+            
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const item = document.createElement('div');
+                    item.className = 'falling-item';
+                    
+                    const typeIndex = Math.floor(Math.random() * types.length);
+                    item.textContent = types[typeIndex];
+                    item.style.fontSize = isMobile() ? 
+                        `${Math.random() * 20 + 10}px` : 
+                        `${Math.random() * 30 + 15}px`;
+                    
+                    item.style.left = `${Math.random() * 100}%`;
+                    const duration = Math.random() * 8 + 5;
+                    item.style.animationDuration = `${duration}s`;
+                    
+                    itemsContainer.appendChild(item);
+                    
+                    setTimeout(() => {
+                        item.remove();
+                    }, duration * 1000);
+                }, i * 100);
+            }
+        }
+        
+        // ปุ่มเปิด/ปิดเพลง
+        document.getElementById('musicControl').addEventListener('click', function() {
+            const musicIcon = this.querySelector('i');
+            
+            if (musicIcon.classList.contains('fa-music')) {
+                musicIcon.classList.remove('fa-music');
+                musicIcon.classList.add('fa-pause');
+                
+                // สร้าง audio element (ในกรณีที่จะใช้เพลงจริง)
+                if (!window.bgMusic) {
+                    window.bgMusic = document.createElement('audio');
+                    window.bgMusic.loop = true;
+                    window.bgMusic.volume = 0.5;
+                    // หมายเหตุ: ในสถานการณ์จริงต้องใส่ URL ของเพลง
+                    // window.bgMusic.src = 'URL_ของเพลง';
+                    document.body.appendChild(window.bgMusic);
+                }
+                
+                // window.bgMusic.play();
+                this.classList.add('active');
+            } else {
+                musicIcon.classList.remove('fa-pause');
+                musicIcon.classList.add('fa-music');
+                
+                if (window.bgMusic) {
+                    // window.bgMusic.pause();
+                }
+                this.classList.remove('active');
+            }
+        });
+        
+        // เริ่มต้นเมื่อโหลดหน้าเว็บ
+        window.onload = function() {
+            createStars();
+            createFallingItems();
+            
+            // แอนิเมชันเพิ่มเติมสำหรับองค์ประกอบต่างๆ
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${0.2 * (index + 1)}s`;
+            });
+        };
+    </script>
+</body>
+</html>
