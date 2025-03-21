@@ -42,16 +42,27 @@
             overflow: hidden;
         }
         
+        /* เพิ่มเลเยอร์สีพื้นหลังสำรองกรณีเอฟเฟคไม่ทำงาน */
+        .bg-fallback {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-bg);
+            z-index: -2;
+        }
+        
         .bg-stars {
             width: 100%;
             height: 100%;
             position: absolute;
+            z-index: -1;
         }
         
         .star {
             position: absolute;
             background-color: white;
             border-radius: 50%;
+            box-shadow: 0 0 3px #fff;
         }
         
         .galaxy {
@@ -61,6 +72,7 @@
             background: radial-gradient(ellipse at center, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 60%);
             opacity: 0.3;
             animation: galaxyPulse 8s infinite ease-in-out;
+            z-index: -1;
         }
         
         .container {
@@ -312,6 +324,46 @@
             transform: scale(1.1);
         }
         
+        /* เพิ่ม Input สำหรับคำตอบ */
+        .response-form {
+            width: 100%;
+            max-width: 500px;
+            margin: 1rem auto;
+            text-align: center;
+            display: none;
+        }
+        
+        .response-input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+            font-family: 'Prompt', sans-serif;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        
+        .response-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .response-input:focus {
+            outline: none;
+            box-shadow: 0 0 15px var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        /* สร้างเอฟเฟกต์กระพริบสำหรับดาว */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
         @keyframes heartbeat {
             0% { transform: rotate(-45deg) scale(1); }
             14% { transform: rotate(-45deg) scale(1.1); }
@@ -374,6 +426,21 @@
             p {
                 font-size: 1rem;
             }
+            
+            /* ปรับปรุงเพิ่มเติมสำหรับมือถือ */
+            .bg-stars {
+                opacity: 1 !important;
+                display: block !important;
+            }
+            
+            .star {
+                box-shadow: 0 0 5px #fff !important;
+            }
+            
+            /* ปรับขนาดหัวใจให้เห็นได้ชัดบนมือถือ */
+            .heart, .heart::before, .heart::after {
+                box-shadow: 0 0 40px var(--primary-color);
+            }
         }
         
         @media (max-width: 480px) {
@@ -422,6 +489,7 @@
 </head>
 <body>
     <div class="bg-wrapper">
+        <div class="bg-fallback"></div>
         <div class="bg-stars" id="stars"></div>
         <div class="galaxy"></div>
     </div>
@@ -437,24 +505,30 @@
             
             <h1>ส่งความรู้สึกดีๆ <span class="highlight">ถึงคุณ</span></h1>
             
-            <p>คุณรู้ไหม ว่าทุกครั้งที่ได้เจอคุณ โลกของผมเหมือนหยุดหมุน<br>
-            รอยยิ้มของคุณทำให้วันที่แย่ๆ กลายเป็นวันที่สดใส</p>
+            <p>ในทุกๆ ครั้งที่สายตาเราสบกัน โลกรอบตัวก็เหมือนหยุดหมุน<br>
+            รอยยิ้มของคุณเป็นแสงสว่างในวันที่มืดมน ทำให้ทุกความทุกข์เลือนหายไป</p>
         </div>
         
         <div class="card message" style="animation-delay: 0.6s;">
-            <p>คุณเป็นคนพิเศษที่ผมอยากให้รู้ว่า...</p>
+            <p>อยากบอกคุณว่า...</p>
             
             <div class="special-message" id="specialMessage">
-                <p>ผมชอบในตัวคุณ ในความเป็นคุณ ในทุกๆ อย่างที่คุณเป็น</p>
-                <p>ผมอยากชวนคุณออกไปใช้เวลาด้วยกัน เพื่อทำความรู้จักกันให้มากขึ้น</p>
-                <p>ถ้าคุณรู้สึกเหมือนกัน อยากให้เราเริ่มต้นอะไรดีๆ ด้วยกัน</p>
-                <p class="highlight">คุณจะให้โอกาสผมไหม?</p>
+                <p>หลายครั้งที่เราได้พูดคุยกัน ทำให้ฉันรู้สึกว่าคุณคือคนพิเศษคนหนึ่ง</p>
+                <p>ฉันชื่นชมในตัวคุณ ทั้งความคิด รอยยิ้ม และตัวตนที่เป็นคุณ</p>
+                <p>ฉันอยากใช้เวลาร่วมกับคุณมากขึ้น เพื่อทำความรู้จักกันให้ลึกซึ้ง</p>
+                <p class="highlight">คุณจะให้โอกาสความรู้สึกดีๆ ของเราได้เริ่มต้นไหม?</p>
             </div>
             
             <div class="buttons">
                 <button class="btn btn-primary" id="showMessage">เปิดอ่านข้อความพิเศษ</button>
                 <button class="btn btn-secondary" id="yesBtn" style="display: none;">ตกลง ♥</button>
                 <button class="btn btn-secondary" id="noBtn" style="display: none; position: relative;">ยังไม่พร้อม</button>
+                <button class="btn btn-primary" id="customReplyBtn" style="display: none;">อยากตอบกลับด้วยคำพูดของตัวเอง</button>
+            </div>
+            
+            <div class="response-form" id="responseForm">
+                <input type="text" class="response-input" id="responseInput" placeholder="พิมพ์ข้อความตอบกลับ...">
+                <button class="btn btn-primary" id="sendResponseBtn">ส่งคำตอบ</button>
             </div>
         </div>
     </div>
@@ -464,53 +538,51 @@
     </div>
     
     <script>
-        // จำกัดจำนวนดาวและเอฟเฟกต์บนมือถือ
+        // ฟังก์ชันตรวจสอบว่าเป็นอุปกรณ์มือถือหรือไม่
         function isMobile() {
             return window.innerWidth <= 768;
         }
         
-        // สร้างดาวบนท้องฟ้า
+        // สร้างดาวบนท้องฟ้า - ปรับให้แสดงผลได้ดีขึ้นบนมือถือ
         function createStars() {
             const starsContainer = document.getElementById('stars');
-            // ลดจำนวนดาวบนมือถือ
-            const starCount = isMobile() ? 50 : 150;
+            // ลดจำนวนดาวบนมือถือ แต่ยังมีให้เห็นมากพอ
+            const starCount = isMobile() ? 120 : 200;
             
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 
-                // สุ่มขนาดและตำแหน่ง
-                const size = Math.random() * 2 + 1;
+                // สุ่มขนาดและตำแหน่ง ปรับให้ดาวมีขนาดใหญ่ขึ้นบนมือถือเพื่อให้เห็นได้ชัด
+                const size = isMobile() ? 
+                    (Math.random() * 3 + 1.5) : 
+                    (Math.random() * 2 + 1);
+                    
                 star.style.width = `${size}px`;
                 star.style.height = `${size}px`;
                 star.style.left = `${Math.random() * 100}%`;
                 star.style.top = `${Math.random() * 100}%`;
                 
-                // สุ่มการกระพริบ
+                // เพิ่มความสว่างและเงาให้เห็นชัดในมือถือ
+                if (isMobile()) {
+                    star.style.boxShadow = '0 0 5px #fff';
+                }
+                
+                // สุ่มการกระพริบด้วย animation ของ CSS
                 const duration = Math.random() * 3 + 2;
                 star.style.animation = `twinkle ${duration}s infinite ease-in-out ${Math.random() * 5}s`;
                 
                 starsContainer.appendChild(star);
             }
-            
-            // เพิ่ม keyframe สำหรับการกระพริบ
-            const style = document.createElement('style');
-            style.innerHTML = `
-                @keyframes twinkle {
-                    0%, 100% { opacity: 0.2; }
-                    50% { opacity: 1; }
-                }
-            `;
-            document.head.appendChild(style);
         }
         
-        // สร้างกลีบดอกไม้หรือรูปหัวใจที่ร่วงหล่น แบบเบาลงบนมือถือ
+        // สร้างกลีบดอกไม้หรือรูปหัวใจที่ร่วงหล่น - ปรับให้แสดงผลได้ดีขึ้นบนมือถือ
         function createFallingItems() {
             const itemsContainer = document.getElementById('fallingItems');
             const types = ['❤️', '🌸', '✨', '💖', '💕'];
             
-            // ลดความถี่บนมือถือ
-            const interval = isMobile() ? 1000 : 300;
+            // ปรับความถี่ให้เหมาะสม
+            const interval = isMobile() ? 800 : 300;
             
             setInterval(() => {
                 const item = document.createElement('div');
@@ -520,9 +592,9 @@
                 const typeIndex = Math.floor(Math.random() * types.length);
                 item.textContent = types[typeIndex];
                 
-                // ปรับขนาดให้เล็กลงบนมือถือ
+                // ปรับขนาดให้เห็นได้ชัดบนมือถือ
                 item.style.fontSize = isMobile() ? 
-                    `${Math.random() * 15 + 10}px` : 
+                    `${Math.random() * 20 + 15}px` : 
                     `${Math.random() * 20 + 10}px`;
                 
                 // สุ่มตำแหน่งและความเร็ว
@@ -538,73 +610,6 @@
                 }, duration * 1000);
             }, interval);
         }
-        
-        // แสดงข้อความพิเศษเมื่อกดปุ่ม
-        document.getElementById('showMessage').addEventListener('click', function() {
-            const specialMessage = document.getElementById('specialMessage');
-            specialMessage.classList.add('show-message');
-            this.style.display = 'none';
-            
-            // แสดงปุ่มตกลงและปฏิเสธ
-            document.getElementById('yesBtn').style.display = 'block';
-            document.getElementById('noBtn').style.display = 'block';
-        });
-        
-        // ปรับการทำงานบนอุปกรณ์สัมผัส
-        const noBtn = document.getElementById('noBtn');
-        if (isMobile()) {
-            // สำหรับมือถือใช้ touchstart แทน mouseover
-            noBtn.addEventListener('touchstart', moveNoButton);
-        } else {
-            noBtn.addEventListener('mouseover', moveNoButton);
-        }
-        
-        // ฟังก์ชันย้ายปุ่ม "ยังไม่พร้อม"
-        function moveNoButton() {
-            const btnWidth = this.offsetWidth;
-            const btnHeight = this.offsetHeight;
-            const maxX = window.innerWidth - btnWidth - 50;
-            const maxY = window.innerHeight - btnHeight - 50;
-            
-            const randomX = Math.floor(Math.random() * maxX);
-            const randomY = Math.floor(Math.random() * maxY);
-            
-            this.style.position = 'fixed';
-            this.style.left = `${randomX}px`;
-            this.style.top = `${randomY}px`;
-        }
-        
-        // เมื่อกดปุ่มตกลง
-        document.getElementById('yesBtn').addEventListener('click', function() {
-            const messages = document.querySelectorAll('.card');
-            messages.forEach(msg => msg.style.display = 'none');
-            
-            const container = document.querySelector('.container');
-            const newCard = document.createElement('div');
-            newCard.className = 'card';
-            newCard.style.animation = 'fadeUp 1s forwards';
-            
-            newCard.innerHTML = `
-                <div class="heart-container floating">
-                    <div class="heart"></div>
-                </div>
-                <h1>ขอบคุณที่ให้โอกาส ❤️</h1>
-                <p>คุณทำให้วันนี้เป็นวันที่พิเศษมากๆ</p>
-                <p>ผมสัญญาว่าจะทำให้คุณมีความสุขในทุกๆ วันที่เราได้อยู่ด้วยกัน</p>
-                <p class="highlight">เราจะสร้างความทรงจำดีๆ ร่วมกัน</p>
-            `;
-            
-            container.appendChild(newCard);
-            
-            // เพิ่มเอฟเฟคหัวใจเต้นแรงขึ้น
-            const hearts = document.querySelectorAll('.heart');
-            hearts.forEach(heart => {
-                heart.style.animation = 'heartbeat 1s infinite';
-            });
-            
-            // เพิ่มเอฟเฟคดอกไม้ร่วงเยอะขึ้น
-            createMoreFallingItems();
-        });
         
         // เพิ่มเอฟเฟคดอกไม้ร่วงเยอะขึ้นเมื่อกดตกลง
         function createMoreFallingItems() {
@@ -638,48 +643,105 @@
             }
         }
         
-        // ปุ่มเปิด/ปิดเพลง
-        document.getElementById('musicControl').addEventListener('click', function() {
-            const musicIcon = this.querySelector('i');
+        // แสดงข้อความพิเศษเมื่อกดปุ่ม
+        document.getElementById('showMessage').addEventListener('click', function() {
+            const specialMessage = document.getElementById('specialMessage');
+            specialMessage.classList.add('show-message');
+            this.style.display = 'none';
             
-            if (musicIcon.classList.contains('fa-music')) {
-                musicIcon.classList.remove('fa-music');
-                musicIcon.classList.add('fa-pause');
-                
-                // สร้าง audio element (ในกรณีที่จะใช้เพลงจริง)
-                if (!window.bgMusic) {
-                    window.bgMusic = document.createElement('audio');
-                    window.bgMusic.loop = true;
-                    window.bgMusic.volume = 0.5;
-                    // หมายเหตุ: ในสถานการณ์จริงต้องใส่ URL ของเพลง
-                    // window.bgMusic.src = 'URL_ของเพลง';
-                    document.body.appendChild(window.bgMusic);
-                }
-                
-                // window.bgMusic.play();
-                this.classList.add('active');
+            // แสดงปุ่มตกลงและปฏิเสธ และปุ่มตอบด้วยข้อความ
+            document.getElementById('yesBtn').style.display = 'block';
+            document.getElementById('noBtn').style.display = 'block';
+            document.getElementById('customReplyBtn').style.display = 'block';
+        });
+        
+        // เพิ่มปุ่มสำหรับตอบด้วยข้อความของตัวเอง
+        document.getElementById('customReplyBtn').addEventListener('click', function() {
+            document.getElementById('responseForm').style.display = 'block';
+            document.getElementById('yesBtn').style.display = 'none';
+            document.getElementById('noBtn').style.display = 'none';
+            this.style.display = 'none';
+        });
+        
+        // จัดการการส่งคำตอบด้วยข้อความของผู้เข้าชม
+        document.getElementById('sendResponseBtn').addEventListener('click', function() {
+            const responseText = document.getElementById('responseInput').value.trim();
+            if(responseText) {
+                showPersonalizedResponse(responseText);
             } else {
-                musicIcon.classList.remove('fa-pause');
-                musicIcon.classList.add('fa-music');
-                
-                if (window.bgMusic) {
-                    // window.bgMusic.pause();
-                }
-                this.classList.remove('active');
+                alert('กรุณาพิมพ์ข้อความก่อนส่ง');
             }
         });
         
-        // เริ่มต้นเมื่อโหลดหน้าเว็บ
-        window.onload = function() {
-            createStars();
-            createFallingItems();
+        // แสดงผลลัพธ์จากคำตอบที่ผู้เข้าชมให้มา
+        function showPersonalizedResponse(responseText) {
+            const messages = document.querySelectorAll('.card');
+            messages.forEach(msg => msg.style.display = 'none');
             
-            // แอนิเมชันเพิ่มเติมสำหรับองค์ประกอบต่างๆ
-            const cards = document.querySelectorAll('.card');
-            cards.forEach((card, index) => {
-                card.style.animationDelay = `${0.2 * (index + 1)}s`;
-            });
-        };
-    </script>
-</body>
-</html>
+            const container = document.querySelector('.container');
+            const newCard = document.createElement('div');
+            newCard.className = 'card';
+            newCard.style.animation = 'fadeUp 1s forwards';
+            
+            newCard.innerHTML = `
+                <div class="heart-container floating">
+                    <div class="heart"></div>
+                </div>
+                <h1>ขอบคุณสำหรับคำตอบของคุณ ❤️</h1>
+                <p class="highlight">"${responseText}"</p>
+                <p>ฉันจะเก็บคำพูดนี้ไว้ในใจเสมอ</p>
+                <p>ขอบคุณที่แบ่งปันความรู้สึกจริงใจ</p>
+            `;
+            
+            container.appendChild(newCard);
+            createMoreFallingItems();
+        }
+        
+        // ปรับการทำงานบนอุปกรณ์สัมผัส
+        const noBtn = document.getElementById('noBtn');
+        if ('ontouchstart' in window) {
+            // สำหรับมือถือใช้ touchstart แทน mouseover
+            noBtn.addEventListener('touchstart', moveNoButton);
+        } else {
+            noBtn.addEventListener('mouseover', moveNoButton);
+        }
+        
+        // ฟังก์ชันย้ายปุ่ม "ยังไม่พร้อม"
+        function moveNoButton(e) {
+            // ป้องกันการเลื่อนหน้าจอบนมือถือ
+            if (e && e.cancelable) {
+                e.preventDefault();
+            }
+            
+            const btnWidth = this.offsetWidth;
+            const btnHeight = this.offsetHeight;
+            
+            // ปรับขอบเขตการเคลื่อนที่ให้อยู่ในหน้าจอเสมอ
+            const maxX = window.innerWidth - btnWidth - 20;
+            const maxY = window.innerHeight - btnHeight - 20;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            this.style.position = 'fixed';
+            this.style.left = `${randomX}px`;
+            this.style.top = `${randomY}px`;
+            
+            // เพิ่มการสั่นนิดหน่อยให้รู้สึกสนุก
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 200);
+            
+            return false;
+        }
+        
+        // เมื่อกดปุ่มตกลง
+        document.getElementById('yesBtn').addEventListener('click', function() {
+            const messages = document.querySelectorAll('.card');
+            messages.forEach(msg => msg.style.display = 'none');
+            
+            const container = document.querySelector('.container');
+            const newCard = document.createElement('div');
+            newCard.className = 'card';
+            newCard.style.animation
